@@ -9,7 +9,7 @@ import { HubConnection } from "@aspnet/signalr";
 })
 export class HomeComponent implements OnInit {
   group: any;
-  email: string;
+  name: string;
   groupId: string;
   hubConnection: signalR.HubConnection;
   connectionId: string;
@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
   }
 
   CreateOrJoin() {
-    this.hubConnection.invoke("CreateOrJoin", this.groupId, this.email);
+    this.hubConnection.invoke("CreateOrJoin", this.groupId, this.name);
   }
 
   Drink() {

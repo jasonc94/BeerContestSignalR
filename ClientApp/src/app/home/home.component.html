@@ -1,13 +1,13 @@
 <div *ngIf="!group" class="form form-start">
   <div class="container">
     <div class="form-group">
-      <label>Email</label>
+      <label>Name</label>
       <input
-        type="email"
+        type="text"
         class="form-control"
-        name="email"
-        [(ngModel)]="email"
-        placeholder="Email"
+        name="name"
+        [(ngModel)]="name"
+        placeholder="name"
       />
     </div>
     <div class="form-group">
@@ -23,15 +23,14 @@
     <button (click)="CreateOrJoin()" class="btn btn-primary">
       Create or Join Group
     </button>
-    <img src="assets/glass.jpg" width="40px" height="40px" />
   </div>
 </div>
 
 <div *ngIf="group">
   <div class="glass" *ngFor="let glass of group.glasses">
     <div class="beer-container">
-      <img src="assets/Glass-512 (1).png" />
       <div class="beer" [style.height]="glass.value + '%'"></div>
+      <img src="assets/Glass-512 (1).png" />
     </div>
   </div>
   <div class="main-button" *ngIf="group.hasStarted && !group.hasFinished">

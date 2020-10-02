@@ -29,7 +29,7 @@ namespace BeerContest.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public void CreateOrJoin(string key, string email)
+        public void CreateOrJoin(string key, string name)
         {
             var group = _groups.FirstOrDefault(g => g.Key == key);
             if (group == null)
@@ -43,7 +43,7 @@ namespace BeerContest.Hubs
                 throw new Exception("You cannot join a group which has started or finished");
             }
 
-            group.Glasses.Add(new Glass { ConnectionId = Context.ConnectionId, Email = email });
+            group.Glasses.Add(new Glass { ConnectionId = Context.ConnectionId, Name = name });
 
             BroadcastGroup(group);
             GetConnectionId();
@@ -70,7 +70,7 @@ namespace BeerContest.Hubs
                 {
                     group.HasFinished = true;
                     group.WinnerConnectionId = Context.ConnectionId;
-                    group.WinnerEmail = glass.Email;
+                    group.WinnerName = glass.Name;
                 }
                 BroadcastGroup(group);
                 if (group.HasFinished)
@@ -100,7 +100,7 @@ namespace BeerContest.Hubs
         public bool HasFinished { get; set; }
         public string Key { get; set; }
         public string WinnerConnectionId { get; set; }
-        public string WinnerEmail { get; set; }
+        public string WinnerName { get; set; }
         //ConnectionId
         public string Owner { get; set; }
         public List<Glass> Glasses { get; set; } = new List<Glass>();
@@ -110,7 +110,7 @@ namespace BeerContest.Hubs
     {
         public bool HasLeft { get; set; }
         public string ConnectionId { get; set; }
-        public string Email { get; set; }
+        public string Name { get; set; }
         public int Value { get; set; } = 100;
     }
 }
