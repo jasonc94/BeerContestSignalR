@@ -1,4 +1,4 @@
-<div *ngIf="!group" class="form form-start">
+<div *ngIf="!(group | async)" class="form form-start">
   <div class="container">
     <div class="form-group">
       <label>Name</label>
@@ -26,25 +26,28 @@
   </div>
 </div>
 
-<div *ngIf="group">
-  <div class="glass" *ngFor="let glass of group.glasses">
+<div *ngIf="group | async">
+  <div class="glass" *ngFor="let glass of (group | async).glasses">
     <div class="beer-container">
       <div class="beer" [style.height]="glass.value + '%'"></div>
       <img src="assets/Glass-512 (1).png" />
     </div>
   </div>
-  <div class="main-button" *ngIf="group.hasStarted && !group.hasFinished">
+  <div
+    class="main-button"
+    *ngIf="(group | async).hasStarted && !(group | async).hasFinished"
+  >
     <button (click)="Drink()">Drink</button>
   </div>
   <div
     class="main-button"
-    *ngIf="!group.hasStarted && connectionId == group.owner"
+    *ngIf="!(group | async).hasStarted && connectionId == (group | async).owner"
   >
     <button (click)="Start()">Start</button>
   </div>
-  <div class="main-button" *ngIf="group.hasFinished">
+  <div class="main-button" *ngIf="(group | async).hasFinished">
     Drinking is over!!! Winner is
-    <b>{{ group.winnerEmail }}</b
+    <b>{{ (group | async).winnerEmail }}</b
     >. Click <button (click)="clear()">Here</button> to start over.
   </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import * as signalR from "@aspnet/signalr";
 import { HubConnection } from "@aspnet/signalr";
+import { BehaviorSubject, ReplaySubject } from "rxjs";
 
 @Component({
   selector: "app-home",
@@ -8,7 +9,7 @@ import { HubConnection } from "@aspnet/signalr";
   styleUrls: ["./home.component.css"],
 })
 export class HomeComponent implements OnInit {
-  group: any;
+  group = new ReplaySubject<any>(1);
   name: string;
   groupId: string;
   hubConnection: signalR.HubConnection;
@@ -19,7 +20,8 @@ export class HomeComponent implements OnInit {
       .withUrl("/drink")
       .build();
     this.hubConnection.on("Group", (data) => {
-      this.group = data;
+      console.log("on group update");
+      this.group.next(data);
     });
     this.hubConnection.on("ConnectionId", (data) => {
       this.connectionId = data;
@@ -33,7 +35,9 @@ export class HomeComponent implements OnInit {
   }
 
   CreateOrJoin() {
-    this.hubConnection.invoke("CreateOrJoin", this.groupId, this.name);
+    this.hubConnection
+      .invoke("CreateOrJoin", this.groupId, this.name)
+      .then((_) => console.log("create or join group"));
   }
 
   Drink() {
@@ -41,7 +45,9 @@ export class HomeComponent implements OnInit {
   }
 
   Start() {
-    this.hubConnection.invoke("Start");
+    this.hubConnection
+      .invoke("Start")
+      .then((_) => console.log("start contest"));
   }
 
   clear() {
