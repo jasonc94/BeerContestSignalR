@@ -26,6 +26,15 @@ namespace BeerContest.Hubs
                     _groups.Remove(gs[i]);
                 }
             }
+            else
+            {
+                var g = _groups.Where(g => g.Glasses.Any(s => s.ConnectionId == Context.ConnectionId)).FirstOrDefault();
+                if (g != null)
+                {
+                    g.Glasses = g.Glasses.Where(s => s.ConnectionId != Context.ConnectionId).ToList();
+                    BroadcastGroup(g);
+                }
+            }
             return base.OnDisconnectedAsync(exception);
         }
 

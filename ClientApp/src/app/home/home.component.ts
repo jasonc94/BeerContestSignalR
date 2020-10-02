@@ -14,16 +14,18 @@ export class HomeComponent implements OnInit {
   groupId: string;
   hubConnection: signalR.HubConnection;
   connectionId: string;
+  messages: string[] = [];
 
   ngOnInit() {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl("/drink")
       .build();
     this.hubConnection.on("Group", (data) => {
-      console.log("on group update");
+      this.messages.push(this.name + " group updated");
       this.group.next(data);
     });
     this.hubConnection.on("ConnectionId", (data) => {
+      this.messages.push(this.name + " Connection Id" + data);
       this.connectionId = data;
     });
     this.hubConnection
@@ -41,7 +43,9 @@ export class HomeComponent implements OnInit {
   }
 
   Drink() {
-    this.hubConnection.invoke("Drink");
+    this.hubConnection
+      .invoke("Drink")
+      .then((_) => this.messages.push(this.name + " drink"));
   }
 
   Start() {

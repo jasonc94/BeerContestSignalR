@@ -51,3 +51,8 @@
     >. Click <button (click)="clear()">Here</button> to start over.
   </div>
 </div>
+<div *ngIf="messages">
+  <ng-container *ngFor="let msg of messages">
+    <p>{{ msg }}</p>
+  </ng-container>
+</div>
