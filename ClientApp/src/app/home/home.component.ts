@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import * as signalR from "@aspnet/signalr";
 import { HubConnection } from "@aspnet/signalr";
 import { BehaviorSubject, ReplaySubject } from "rxjs";
@@ -16,13 +16,17 @@ export class HomeComponent implements OnInit {
   connectionId: string;
   messages: string[] = [];
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   ngOnInit() {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl("/drink")
       .build();
     this.hubConnection.on("Group", (data) => {
       this.messages.push(this.name + " group updated");
+      console.log(this.name + " group updated");
       this.group.next(data);
+      this.cdr.detectChanges();
     });
     this.hubConnection.on("ConnectionId", (data) => {
       this.messages.push(this.name + " Connection Id" + data);
@@ -43,9 +47,11 @@ export class HomeComponent implements OnInit {
   }
 
   Drink() {
-    this.hubConnection
-      .invoke("Drink")
-      .then((_) => this.messages.push(this.name + " drink"));
+    this.hubConnection.invoke("Drink").then((_) => {
+      this.messages.push(this.name + " drink");
+      console.log(this.name + " drink");
+      this.cdr.detectChanges();
+    });
   }
 
   Start() {
