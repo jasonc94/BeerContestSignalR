@@ -15,7 +15,6 @@ export class HomeComponent implements OnInit {
   hubConnection: signalR.HubConnection;
   connectionId: string;
   message: string;
-  messages: string[] = [];
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -24,13 +23,13 @@ export class HomeComponent implements OnInit {
       .withUrl("/drink")
       .build();
     this.hubConnection.on("Group", (data) => {
-      this.messages.push(this.name + " group updated");
       console.log(this.name + " group updated");
       this.group.next(data);
       this.cdr.detectChanges();
+      let scroll = document.getElementById("scroll");
+      scroll.scrollTop = scroll.scrollHeight;
     });
     this.hubConnection.on("ConnectionId", (data) => {
-      this.messages.push(this.name + " Connection Id" + data);
       this.connectionId = data;
     });
     this.hubConnection
@@ -49,7 +48,6 @@ export class HomeComponent implements OnInit {
 
   Drink() {
     this.hubConnection.invoke("Drink").then((_) => {
-      this.messages.push(this.name + " drink");
       console.log(this.name + " drink");
       this.cdr.detectChanges();
     });
@@ -65,12 +63,12 @@ export class HomeComponent implements OnInit {
     if (this.message && this.message !== "") {
       this.hubConnection.invoke("SendMessage", this.message).then((_) => {
         console.log(this.name + " sended message");
+        this.message = "";
         this.cdr.detectChanges();
         let scroll = document.getElementById("scroll");
         scroll.scrollTop = scroll.scrollHeight;
       });
       console.log(this.message);
-      this.message = "";
     }
   }
 
