@@ -8,6 +8,7 @@
   height: 150px;
   width: 250px;
   position: relative;
+  margin-right: 2rem;
 }
 .beer-container img {
   z-index: 100;
