@@ -30,7 +30,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  font-size: 40px;
+  font-size: 20px;
   z-index: 1000;
 }
 .main-button button {
@@ -55,9 +55,33 @@ img.gravatar {
 }
 
 .chatBody {
-  height: 400px;
+  height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+@media screen and (max-width: 400px) {
+  .chatBody {
+    height: 200px;
+  }
+  .beer {
+    position: absolute;
+    bottom: 0;
+    width: 100px;
+    background: #e69100;
+  }
+  .beer-container {
+    height: 65px;
+    width: 100px;
+    position: relative;
+    margin-right: 2rem;
+  }
+  .beer-container img {
+    z-index: 100;
+    height: 65px;
+    width: 100px;
+    position: absolute;
+  }
 }
 
 .chatMsgContainer {
