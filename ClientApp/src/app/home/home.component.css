@@ -15,6 +15,15 @@
   width: 250px;
   position: absolute;
 }
+
+.name {
+  margin-bottom: 1rem;
+  text-align: center;
+  margin-top: 1rem;
+  background: #99ecf5;
+  border-radius: 100px;
+}
+
 .main-button {
   position: fixed;
   bottom: 0;
