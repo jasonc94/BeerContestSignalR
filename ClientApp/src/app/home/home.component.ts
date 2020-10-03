@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
 import * as signalR from "@aspnet/signalr";
 import { HubConnection } from "@aspnet/signalr";
 import { BehaviorSubject, ReplaySubject } from "rxjs";
@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
   groupId: string;
   hubConnection: signalR.HubConnection;
   connectionId: string;
+  message: string;
   messages: string[] = [];
 
   constructor(private cdr: ChangeDetectorRef) {}
@@ -58,6 +59,19 @@ export class HomeComponent implements OnInit {
     this.hubConnection
       .invoke("Start")
       .then((_) => console.log("start contest"));
+  }
+
+  sendMessage() {
+    if (this.message && this.message !== "") {
+      this.hubConnection.invoke("SendMessage", this.message).then((_) => {
+        console.log(this.name + " sended message");
+        this.cdr.detectChanges();
+        let scroll = document.getElementById("scroll");
+        scroll.scrollTop = scroll.scrollHeight;
+      });
+      console.log(this.message);
+      this.message = "";
+    }
   }
 
   clear() {

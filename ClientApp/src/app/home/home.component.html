@@ -33,6 +33,38 @@
       <img src="assets/Glass-512 (1).png" />
     </div>
   </div>
+  <div class="chatWindow">
+    <div class="chatBody" #scroll id="scroll">
+      <div *ngFor="let msg of (group | async).messages">
+        <div
+          class="chatMsgContainer"
+          [ngStyle]="{
+            'justify-content':
+              msg.connectionId === connectionId ? 'flex-end' : 'flex-start'
+          }"
+        >
+          <div
+            class="chatMsg"
+            [ngStyle]="{
+              background:
+                msg.connectionId === connectionId ? '#a2eca2' : '#f9f9f9'
+            }"
+          >
+            {{ msg.message }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chatInput">
+      <input
+        type="text"
+        [(ngModel)]="message"
+        class="form-control"
+        placeholder="Type a message..."
+        (keyup.enter)="sendMessage()"
+      />
+    </div>
+  </div>
   <div
     class="main-button"
     *ngIf="(group | async).hasStarted && !(group | async).hasFinished"

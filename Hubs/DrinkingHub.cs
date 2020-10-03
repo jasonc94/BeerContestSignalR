@@ -8,12 +8,20 @@ namespace BeerContest.Hubs
 {
     public class DrinkingHub : Hub
     {
-        public void Echo(string msg)
-        {
-            Clients.All.SendAsync("Send", msg);
-        }
+
 
         private static List<DrinkingGroup> _groups = new List<DrinkingGroup>();
+
+
+        public void SendMessage(string msg)
+        {
+            var group = _groups.FirstOrDefault(g => g.Glasses.Any(gl => gl.ConnectionId == Context.ConnectionId));
+            if (group != null)
+            {
+                group.Messages.Add(new ChatMessage { Message = msg, ConnectionId = Context.ConnectionId });
+                BroadcastGroup(group);
+            }
+        }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
@@ -113,6 +121,7 @@ namespace BeerContest.Hubs
         //ConnectionId
         public string Owner { get; set; }
         public List<Glass> Glasses { get; set; } = new List<Glass>();
+        public List<ChatMessage> Messages { get; set; } = new List<ChatMessage> { };
     }
 
     public class Glass
@@ -121,5 +130,11 @@ namespace BeerContest.Hubs
         public string ConnectionId { get; set; }
         public string Name { get; set; }
         public int Value { get; set; } = 100;
+    }
+
+    public class ChatMessage
+    {
+        public string Message { get; set; }
+        public string ConnectionId { get; set; }
     }
 }

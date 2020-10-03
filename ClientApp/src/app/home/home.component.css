@@ -35,3 +35,35 @@ img.gravatar {
 .glass {
   display: inline-block;
 }
+
+.chatWindow {
+  background: grey;
+  margin-top: 50px;
+  position: relative;
+  border: 5px solid #a09696;
+  border-radius: 14px;
+}
+
+.chatBody {
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.chatMsgContainer {
+  display: flex;
+  margin: 1rem;
+}
+
+.chatMsg {
+  padding: 0.5rem;
+  border-radius: 10px;
+}
+
+.chatInput {
+  position: sticky;
+  width: 100%;
+  height: auto;
+  top: 350;
+  padding: 0.5rem;
+}
